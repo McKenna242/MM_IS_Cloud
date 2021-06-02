@@ -1,0 +1,22 @@
+
+/fileStorage
+
+    Attach Backend to Filestorage template  
+    Add upload button functionality
+        browse pc for file
+    Download files (file link click, pass path to file possibly)
+    Add filter bar for files
+    change color scheme
+    addition to sort table by recent uploaded, size, file type, etc
+    Option to delete files
+    Resize image icons
+
+
+/homePage
+
+    create home page with credential validation
+    basic just log in screen and small info about website
+
+/file views - video player
+
+    create a page where you can get a link to view your files or video
