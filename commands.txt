@@ -1,0 +1,5 @@
+cd /d F:\ 
+
+cd F:\School\Summer2021\Independent Study
+
+ISvenv\Scripts\activate.bat

@@ -1,10 +1,12 @@
 
 /fileStorage
 
-    Attach Backend to Filestorage template  
-    Add upload button functionality
-        browse pc for file
-    Download files (file link click, pass path to file possibly)
+    Attach Backend to Filestorage template  (done)
+    Add upload button functionality (done)
+        browse pc for file (done)
+    Download files (almost done, issue with spaces in file names)
+    Delete file Option (for 6/11/21)
+    Quicklinks to share downloads or preview images/videos (for 6/11/21)
     Add filter bar for files
     change color scheme
     addition to sort table by recent uploaded, size, file type, etc
@@ -12,11 +14,16 @@
     Resize image icons
 
 
-/homePage
+/homePage (for 6/11/21)
 
+    user upload variable in model to tie in with public or private files
     create home page with credential validation
     basic just log in screen and small info about website
 
 /file views - video player
 
     create a page where you can get a link to view your files or video
+
+/admin
+
+    Admin page established(done)

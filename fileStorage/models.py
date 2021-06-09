@@ -2,20 +2,24 @@ from django.db import models
 
 # Create your models here.
 
-class fileStorage(models.Model):
-    fileName = models.CharField(max_length=50)
-    fileType = models.CharField(max_length=50)
-    #store as int in bytes process return as gb mb etc
-    size = models.IntegerField() #make custom field of int and char var
-    uploadDate = models.DateField()
-    modifyDate = models.DateField()
-    visibility = models.BooleanField()
-    #ptr to file location
-    #text field without max length
-    pathToFile = models.CharField(max_length = 100)
+class fileStorageSchema(models.Model):
+
+    filePath = models.FileField(upload_to="F:/School/Summer2021/Independent Study/media/files")
+    #filePath = models.FileField(upload_to='F:\School\Summer2021\Independent Study\media\files')
+    fileName = models.CharField(max_length=50, default='NAME')
+    fileType = models.CharField(max_length=50, default='TYPE')
+    fileNote = models.TextField(default='Extra Info')
+    fileURL = models.CharField(max_length=50, default='OOPS')
+    #displayed as a string but read in as a byte and converted to mb/gb/etc
+    size = models.CharField(max_length=50, default='0')
+    uploadDate = models.CharField(max_length=50, default='DATE')
+    public = models.BooleanField()
+    uploadedBy = models.IntegerField()
+    #pathToFile = models.CharField(max_length = 100, default='PATH')
     
-    
-    
-    #        { 'fileName': 'Image1', 'fileType': 'Image', 'size': '10mb', 'image' : 'file', 
-    # 'uploadDate' : '5/22/21' , 'modifyDate' : '5/23/21', 'visibility' : 'Private'}
+    def __str__(self):
+        return self.filePath
  
+    def delete(self, *args, **kwargs):
+        self.filePath.delete()
+        super().delete(*args, **kwargs)

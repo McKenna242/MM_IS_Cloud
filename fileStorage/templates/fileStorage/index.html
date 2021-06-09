@@ -13,12 +13,13 @@
 <body>
     <header id = "main-header">
         <nav><a href="/fileStorage" id = "main-logo">Cloud Storage</a></nav>
-        <p>Store files, host videos to come</p>
+        <p>Account: {{ user.username }}         <a href="{% url 'logout' %}">Logout</a>
+        </p>
     </header>
     <main>
         <section>
             
-            <a href="" class="btn">Upload</a>
+            <a href="upload" class="btn">Upload</a>
                                   
             <table class = "storage-item">
                 <tr>
@@ -26,26 +27,34 @@
                     <th>Type</th>
                     <th>Size</th>
                     <th>Uploaded</th>
-                    <th>Modified</th>
-                    <th>Access</th>
+                    <th>Public</th>
+                    <th>Note</th>
                 </tr>
-                {% for fileItem in fileStorage %}
+                {% for fileItem in files %}
+                    {% if fileItem.uploadedBy == user.id or fileItem.public == True %}
                     <tr>
                         <td> 
                             <div class="storage-image">
-                                {% if fileItem.image == 'image' %}
+                                {% if fileItem.fileType == 'image' %}
                                     <img src="{%static "img/icons8-image-file-48.png" %}" alt ="" width = 300px height = 300px > 
-                                {% elif fileItem.image == 'file' %}
+                                {% elif fileItem.fileType == 'file' %}
                                     <img src="{%static "img/icons8-document-48.png" %}" alt ="">
                                 {% endif %} 
-                                <a href="" class="file-btn">{{ fileItem.fileName }}</a>
+                                <a href={{ fileItem.fileURL }}  class = "file-btn" target="_blank">{{ fileItem.fileName }}</a>
                             </div>  
                         </td>
                         <td> {{ fileItem.fileType }} </td>
                         <td> {{ fileItem.size }} </td>
                         <td> {{ fileItem.uploadDate }} </td>
-                        <td> {{ fileItem.modifyDate }} </td>
-                        <td> {{ fileItem.visibility }} </td>
+                         
+                            {% if fileItem.public == True %} 
+                                <td>Yes</td>
+                            {% else %}
+                                <td>No</td>
+                            {% endif %}
+                        
+                        <td> {{fileItem.fileNote }} </td>
+                    {% endif %}
                     </tr>
                 {% endfor %}
 
