@@ -14,7 +14,7 @@ class fileStorageSchema(models.Model):
     size = models.CharField(max_length=50, default='0')
     uploadDate = models.CharField(max_length=50, default='DATE')
     public = models.BooleanField()
-    uploadedBy = models.IntegerField()
+    uploadedBy = models.IntegerField(default=-1)
     #pathToFile = models.CharField(max_length = 100, default='PATH')
     
     def __str__(self):

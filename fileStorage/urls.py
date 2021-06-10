@@ -7,8 +7,8 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path('fileStorage/', views.file_list), #our-domain.com/fileStorage
-    path('fileStorage/upload/', views.upload_file)
+    path('fileStorage/', views.file_list, name = 'file'), #our-domain.com/fileStorage
+    path('fileStorage/upload/', views.upload_file, name = 'upload')
 ]
 
 #just for development

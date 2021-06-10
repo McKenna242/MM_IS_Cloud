@@ -1,7 +1,20 @@
+
+
+ 
 {% extends 'base.html' %}
 
-{% block content %}
- <h2>homepage</h2>
- <p>Total Users:  {{ count }}</p>
+{% load crispy_forms_tags %}
 
- {% endblock %}
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-body">
+          <h2>User Panel</h2>
+          <p>Total Site Users:  {{ count }}</p>
+          <a href="{% url 'password_change' %}">Change Password</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

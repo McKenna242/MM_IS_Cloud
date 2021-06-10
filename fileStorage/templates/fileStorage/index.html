@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,57 +12,57 @@
     <link rel="stylesheet" href="{% static 'fileStorage/CSSstyles/base.css' %}">
     <link rel="stylesheet" href="{% static 'fileStorage/CSSstyles/all-storage.css' %}">
 
-</head>
-<body>
-    <header id = "main-header">
-        <nav><a href="/fileStorage" id = "main-logo">Cloud Storage</a></nav>
-        <p>Account: {{ user.username }}         <a href="{% url 'logout' %}">Logout</a>
-        </p>
-    </header>
-    <main>
-        <section>
-            
-            <a href="upload" class="btn">Upload</a>
-                                  
-            <table class = "storage-item">
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Size</th>
-                    <th>Uploaded</th>
-                    <th>Public</th>
-                    <th>Note</th>
-                </tr>
-                {% for fileItem in files %}
-                    {% if fileItem.uploadedBy == user.id or fileItem.public == True %}
-                    <tr>
-                        <td> 
-                            <div class="storage-image">
-                                {% if fileItem.fileType == 'image' %}
-                                    <img src="{%static "img/icons8-image-file-48.png" %}" alt ="" width = 300px height = 300px > 
-                                {% elif fileItem.fileType == 'file' %}
-                                    <img src="{%static "img/icons8-document-48.png" %}" alt ="">
-                                {% endif %} 
-                                <a href={{ fileItem.fileURL }}  class = "file-btn" target="_blank">{{ fileItem.fileName }}</a>
-                            </div>  
-                        </td>
-                        <td> {{ fileItem.fileType }} </td>
-                        <td> {{ fileItem.size }} </td>
-                        <td> {{ fileItem.uploadDate }} </td>
-                         
-                            {% if fileItem.public == True %} 
-                                <td>Yes</td>
-                            {% else %}
-                                <td>No</td>
-                            {% endif %}
-                        
-                        <td> {{fileItem.fileNote }} </td>
-                    {% endif %}
-                    </tr>
-                {% endfor %}
+{% block content %}
 
-            </table>
-        </section>
-    </main>
-</body>
+<div class="row justify-content-center">
+
+
+
+                        
+                                            
+                        <table class = "table">
+                            <thead class="thead-dark">
+
+                            <tr>
+                                <th scope ="col">Name</th>
+                                <th scope ="col">Type</th>
+                                <th scope ="col">Size</th>
+                                <th scope ="col">Uploaded</th>
+                                <th scope ="col">Public</th>
+                                <th scope ="col">Note</th>
+                            </tr>
+                            {% for fileItem in files %}
+                                {% if fileItem.uploadedBy == user.id or fileItem.public == True %}
+                                <tr>
+                                    <td> 
+                                        <div class="storage-image">
+                                            {% if fileItem.fileType == 'image' %}
+                                                <img src="{%static "img/icons8-image-file-48.png" %}" alt ="" width = 300px height = 300px > 
+                                            {% elif fileItem.fileType == 'file' %}
+                                                <img src="{%static "img/icons8-document-48.png" %}" alt ="">
+                                            {% endif %} 
+                                            <a href={{ fileItem.fileURL }}  class = "file-btn" target="_blank">{{ fileItem.fileName }}</a>
+                                        </div>  
+                                    </td>
+                                    <td> {{ fileItem.fileType }} </td>
+                                    <td> {{ fileItem.size }} </td>
+                                    <td> {{ fileItem.uploadDate }} </td>
+                                    
+                                        {% if fileItem.public == True %} 
+                                            <td>Yes</td>
+                                        {% else %}
+                                            <td>No</td>
+                                        {% endif %}
+                                    
+                                    <td> {{fileItem.fileNote }} </td>
+                                {% endif %}
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+
+
+</div>
 </html>
+
+{% endblock %}
