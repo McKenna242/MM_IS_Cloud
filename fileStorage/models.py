@@ -18,8 +18,7 @@ class fileStorageSchema(models.Model):
     #pathToFile = models.CharField(max_length = 100, default='PATH')
     
     def __str__(self):
-        return self.filePath
- 
-    def delete(self, *args, **kwargs):
-        self.filePath.delete()
-        super().delete(*args, **kwargs)
+        return self.fileName
+    
+
+  

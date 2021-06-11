@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
-
+from django.utils.text import slugify
 from .forms import fileForm
 from .models import fileStorageSchema
 from datetime import datetime
@@ -40,8 +40,8 @@ def upload_file(request):
         if form.is_valid():
             _datetime = datetime.now()
             obj = form.save(commit=True)
-            obj.fileURL = '/media/'+uploaded_file.name
-            obj.fileName, obj.fileType = uploaded_file.name.split(".")
+            obj.fileName, obj.fileType = uploaded_file.name.rsplit(".", 1) #rsplit splits at the last instance of 1 dot
+            obj.fileURL = '/media/'+obj.fileName.replace(" ","%20")+"."+obj.fileType
             obj.filePath = 'F:/School/Summer2021/Independent Study'+context['url']
             setSize = round(uploaded_file.size/1048576, 2)
             setSize = str(setSize)
@@ -65,7 +65,16 @@ def file_list(request):
     })
     
 def delete_file(request, pk):
-    if request.method == 'POST':
-        file = fileStorageSchema.objects.get(pk=pk)
+    file = fileStorageSchema.objects.get(id=pk)
+    if request.method == "POST":
         file.delete()
-    return redirect('/fileStorage/')
+        return redirect('/fileStorage/')
+    
+    context = {'item':file}
+    return render(request, 'fileStorage/delete.html', context)
+
+def video_play(request, pk):
+    files = fileStorageSchema.objects.get(id=pk)
+    context = {'item':files}
+
+    return render(request, 'fileStorage/videoplay.html', context)

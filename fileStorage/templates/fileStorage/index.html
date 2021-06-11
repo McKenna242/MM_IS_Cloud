@@ -28,8 +28,11 @@
                                 <th scope ="col">Type</th>
                                 <th scope ="col">Size</th>
                                 <th scope ="col">Uploaded</th>
+                                <th scope ="col">Share</th>
                                 <th scope ="col">Public</th>
                                 <th scope ="col">Note</th>
+                                <th scope ="col">Delete</th>
+
                             </tr>
                             {% for fileItem in files %}
                                 {% if fileItem.uploadedBy == user.id or fileItem.public == True %}
@@ -47,7 +50,9 @@
                                     <td> {{ fileItem.fileType }} </td>
                                     <td> {{ fileItem.size }} </td>
                                     <td> {{ fileItem.uploadDate }} </td>
-                                    
+                                    <td>
+                                        <a href= "{% url 'video' fileItem.id %}">Link</a>
+                                    </td>
                                         {% if fileItem.public == True %} 
                                             <td>Yes</td>
                                         {% else %}
@@ -55,6 +60,12 @@
                                         {% endif %}
                                     
                                     <td> {{fileItem.fileNote }} </td>
+                                    <td>
+                                        <form method = "link" action = "{% url 'delete' fileItem.id %}">
+                                            <button type="submit" class="btn btn-danger">X</button>
+                                        </form>
+                                    </td>
+
                                 {% endif %}
                                 </tr>
                             {% endfor %}

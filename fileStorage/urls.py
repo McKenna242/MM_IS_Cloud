@@ -8,7 +8,10 @@ from . import views
 
 urlpatterns = [
     path('fileStorage/', views.file_list, name = 'file'), #our-domain.com/fileStorage
-    path('fileStorage/upload/', views.upload_file, name = 'upload')
+    path('fileStorage/upload/', views.upload_file, name = 'upload'),
+    path('fileStorage/delete/<str:pk>/', views.delete_file, name = 'delete'),
+    path('fileStorage/player/<str:pk>', views.video_play, name = 'video')
+
 ]
 
 #just for development

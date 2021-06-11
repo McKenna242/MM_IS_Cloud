@@ -4,26 +4,32 @@
     Attach Backend to Filestorage template  (done)
     Add upload button functionality (done)
         browse pc for file (done)
-    Download files (almost done, issue with spaces in file names)
-    Delete file Option (for 6/11/21)
-    Quicklinks to share downloads or preview images/videos (for 6/11/21)
-    Add filter bar for files
-    change color scheme
+    Download files (done)
+    Delete file Option (done)
+    Quicklinks to share downloads or preview images/videos (display done link needs work)
+    Add filter bar for files 
+    change color scheme (done)
     addition to sort table by recent uploaded, size, file type, etc
-    Option to delete files
+    Option to delete files (done)
     Resize image icons
 
 
 /homePage (for 6/11/21)
 
-    user upload variable in model to tie in with public or private files
-    create home page with credential validation
+    user upload variable in model to tie in with public or private files (done)
+    create home page with credential validation (done)
     basic just log in screen and small info about website
 
 /file views - video player
 
+    plays unique videos from link in file descriptor (done)
+    obfuscate the link , look into guid/uuid
     create a page where you can get a link to view your files or video
 
 /admin
 
     Admin page established(done)
+
+/login
+
+    Fix login redirect, some issue is over writing login redirect_url
