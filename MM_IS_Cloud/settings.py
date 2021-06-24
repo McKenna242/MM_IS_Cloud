@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-$92_g8b7nx8lm#6(pm87ugi$7f$36koq$i5u=p7@3u7(mx$$gy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'mitch-test'
+]
 
 
 # Application definition
@@ -37,12 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'fileStorage',
     'crispy_forms',
     'User',
 
 ]
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -144,7 +147,8 @@ MEDIA_URL = '/media/'
 #name of url pattern
 LOGIN_REDIRECT_URL = 'file'
 
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'file'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+

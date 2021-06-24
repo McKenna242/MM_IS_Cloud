@@ -1,79 +1,80 @@
-{% extends 'base.html' %}
+{% extends 'basefile.html' %}
 
 
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>temp page for file storage</title>
-    <link rel="stylesheet" href="{% static 'fileStorage/CSSstyles/base.css' %}">
-    <link rel="stylesheet" href="{% static 'fileStorage/CSSstyles/all-storage.css' %}">
 
 {% block content %}
 
-<div class="row justify-content-center">
 
+<div class="float-container">
 
+    <div class = "w3-sidebar w3-bar-block" style ="width:10%; display: inline-block;">
+        <a>To Be Filter</a>
+    </div>
 
-                        
-                                            
-                        <table class = "table">
-                            <thead class="thead-dark">
+        <div style = "width:80%;  display: inline-block; ">
+            <div class="row justify-content-center">
+                
+                <table class = "table">
+                    <thead class="thead-dark">
 
-                            <tr>
-                                <th scope ="col">Name</th>
-                                <th scope ="col">Type</th>
-                                <th scope ="col">Size</th>
-                                <th scope ="col">Uploaded</th>
-                                <th scope ="col">Share</th>
-                                <th scope ="col">Public</th>
-                                <th scope ="col">Note</th>
-                                <th scope ="col">Delete</th>
+                    <tr>
+                        <th scope ="col">Name</th>
+                        <th scope ="col">Type</th>
+                        <th scope ="col">Size</th>
+                        <th scope ="col">Uploaded</th>
+                        <th scope ="col">Share</th>
+                        <th scope ="col">Public</th>
+                        <th scope ="col">Note</th>
+                        <th scope ="col">Delete</th>
 
-                            </tr>
-                            {% for fileItem in files %}
-                                {% if fileItem.uploadedBy == user.id or fileItem.public == True %}
-                                <tr>
-                                    <td> 
-                                        <div class="storage-image">
-                                            {% if fileItem.fileType == 'image' %}
-                                                <img src="{%static "img/icons8-image-file-48.png" %}" alt ="" width = 300px height = 300px > 
-                                            {% elif fileItem.fileType == 'file' %}
-                                                <img src="{%static "img/icons8-document-48.png" %}" alt ="">
-                                            {% endif %} 
-                                            <a href={{ fileItem.fileURL }}  class = "file-btn" target="_blank">{{ fileItem.fileName }}</a>
-                                        </div>  
-                                    </td>
-                                    <td> {{ fileItem.fileType }} </td>
-                                    <td> {{ fileItem.size }} </td>
-                                    <td> {{ fileItem.uploadDate }} </td>
-                                    <td>
-                                        <a href= "{% url 'video' fileItem.id %}">Link</a>
-                                    </td>
-                                        {% if fileItem.public == True %} 
-                                            <td>Yes</td>
-                                        {% else %}
-                                            <td>No</td>
-                                        {% endif %}
-                                    
-                                    <td> {{fileItem.fileNote }} </td>
-                                    <td>
-                                        <form method = "link" action = "{% url 'delete' fileItem.id %}">
-                                            <button type="submit" class="btn btn-danger">X</button>
-                                        </form>
-                                    </td>
-
+                    </tr>
+                    {% for fileItem in files %}
+                        {% if fileItem.uploadedBy == user.id or fileItem.public == True %}
+                        <tr>
+                            <td> 
+                                <div class="storage-image">
+                                    {% if fileItem.fileType == 'image' %}
+                                        <img src="{%static "img/icons8-image-file-48.png" %}" alt ="" width = 300px height = 300px > 
+                                    {% elif fileItem.fileType == 'file' %}
+                                        <img src="{%static "img/icons8-document-48.png" %}" alt ="">
+                                    {% endif %} 
+                                    <a href={{ fileItem.fileURL }}  class = "file-btn" target="_blank">{{ fileItem.fileName }}</a>
+                                </div>  
+                            </td>
+                            <td> {{ fileItem.fileType }} </td>
+                            <td> {{ fileItem.size }} </td>
+                            <td> {{ fileItem.uploadDate }} </td>
+                            <td>
+                                {% if fileItem.fileType == 'mkv' %}
+                                    <a href= "{% url 'video' fileItem.id %}">Link</a>
+                                {% elif fileItem.fileType == 'pdf' %}
+                                    <a href= "{% url 'pdf' fileItem.id %}">Link</a>
+                                {% else %}
+                                    <a href= "{% url 'image' fileItem.id %}">Link</a>
                                 {% endif %}
-                                </tr>
-                            {% endfor %}
+                            </td>
+                                {% if fileItem.public == True %} 
+                                    <td>Yes</td>
+                                {% else %}
+                                    <td>No</td>
+                                {% endif %}
+                            
+                            <td> {{fileItem.fileNote }} </td>
+                            <td>
+                                <form method = "link" action = "{% url 'delete' fileItem.id %}">
+                                    <button type="submit" class="btn btn-danger">X</button>
+                                </form>
+                            </td>
 
-                        </table>
-
+                        {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div> 
+        </div>
 
 </div>
-</html>
 
 {% endblock %}
+

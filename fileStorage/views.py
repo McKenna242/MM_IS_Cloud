@@ -1,9 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.core.files.storage import FileSystemStorage
 from django.utils.text import slugify
 from .forms import fileForm
 from .models import fileStorageSchema
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
+from django.http import FileResponse, Http404
+from django.views.decorators.clickjacking import xframe_options_exempt
+
 #from User.apps import UserConfig
 from django.contrib.auth.models import User
 
@@ -28,6 +32,7 @@ def uploads(request):
         context['url'] = fs.url(name)
     return render(request, 'uploads.html', context)
 
+@login_required
 def upload_file(request):
     context = {}
     if request.method == 'POST':
@@ -57,7 +62,8 @@ def upload_file(request):
     return render(request, 'fileStorage/uploads.html', {
         'form': form
     })
-
+    
+@login_required
 def file_list(request):
     files = fileStorageSchema.objects.all()
     return render(request, 'fileStorage/index.html', {
@@ -78,3 +84,21 @@ def video_play(request, pk):
     context = {'item':files}
 
     return render(request, 'fileStorage/videoplay.html', context)
+
+def image_view(request, pk):
+    files = fileStorageSchema.objects.get(id=pk)
+    context = {'item':files}
+
+    return render(request, 'fileStorage/imageview.html', context)
+
+@xframe_options_exempt
+def pdf_view(request, pk):
+    files = fileStorageSchema.objects.get(id=pk)
+    context = {'item':files}
+
+    return render(request, 'fileStorage/pdfview.html', context)
+
+
+@login_required
+def home_redirect(reqest):
+    return redirect('file', permanent=True)

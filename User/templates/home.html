@@ -11,8 +11,17 @@
       <div class="card">
         <div class="card-body">
           <h2>User Panel</h2>
-          <p>Total Site Users:  {{ count }}</p>
-          <a href="{% url 'password_change' %}">Change Password</a>
+          <p>Other Site Users:  {{ count }}</p> 
+          {% if user.is_authenticated %}
+          <p>Current Email: {{ user.email }}</p> 
+          <p>Current Name: {{ user.first_name }} {{ user.last_name }}</p>
+          {% endif %}
+          <a href="{% url 'update' %}">Update User</a>
+          <br>
+          <a href="{% url 'password_change' %}">Change Password</a> 
+          <br>
+          <a href="{% url 'update-email' %}">Change Email</a> 
+
         </div>
       </div>
     </div>

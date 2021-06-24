@@ -10,5 +10,5 @@ ISvenv\Scripts\activate.bat
 
 I had a migration problem and I had to drop/delete a table by pgadmin. Then, when I makemigrations and migrate the table wasn't recreated. In this way, I've found this procedure which worked for me:
 
-python manage.py migrate --fake app_name zero 
-python manage.py migrate app_name
+python manage.py migrate --fake fileStorage zero 
+python manage.py migrate fileStorage

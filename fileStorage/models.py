@@ -1,9 +1,11 @@
-from django.db import models
+import uuid
 
+from django.db import models
 # Create your models here.
 
 class fileStorageSchema(models.Model):
 
+    id = models.UUIDField(primary_key = True, default = uuid.uuid4)
     filePath = models.FileField(upload_to="F:/School/Summer2021/Independent Study/media/files")
     #filePath = models.FileField(upload_to='F:\School\Summer2021\Independent Study\media\files')
     fileName = models.CharField(max_length=50, default='NAME')
@@ -20,5 +22,4 @@ class fileStorageSchema(models.Model):
     def __str__(self):
         return self.fileName
     
-
   
