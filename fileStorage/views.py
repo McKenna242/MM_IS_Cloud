@@ -3,12 +3,12 @@ from django.core.files.storage import FileSystemStorage
 from django.utils.text import slugify
 from .forms import fileForm
 from .models import fileStorageSchema
+from .filters import fileFilter
+from .lists import audioExtensionList, videoExtensionList
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, Http404
 from django.views.decorators.clickjacking import xframe_options_exempt
-
-#from User.apps import UserConfig
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -16,10 +16,14 @@ from django.contrib.auth.models import User
 def index(request):
     #fileStorage = fileStorageSchema.objects.all()
     fileStorage = fileForm()
-    return render(request, 'fileStorage/index.html', {
+    myFilter = fileFilter()
+    
+    context = {'file': fileStorage, 'myFilter':myFilter}
+    
+    return render(request, 'fileStorage/index.html', context) #{
         #'show_fileStorage': False,
-        'file': fileStorage
-    })
+        #'file': fileStorage
+    #})
      
     
 
@@ -62,13 +66,22 @@ def upload_file(request):
     return render(request, 'fileStorage/uploads.html', {
         'form': form
     })
-    
+
+#file list display
 @login_required
 def file_list(request):
+    
+    #grabbing all files in database 
     files = fileStorageSchema.objects.all()
-    return render(request, 'fileStorage/index.html', {
-        'files': files
-    })
+    #filter files according to filter bar
+    myFilter = fileFilter(request.GET, queryset=files)
+    #returns a new list of files
+    files = myFilter.qs
+    audioList = audioExtensionList
+    videoList = videoExtensionList
+    context = {'files': files, 'myFilter':myFilter, 'vidList': videoList, 'audList': audioList}
+    
+    return render(request, 'fileStorage/index.html', context)
     
 def delete_file(request, pk):
     file = fileStorageSchema.objects.get(id=pk)

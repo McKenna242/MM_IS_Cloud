@@ -20,7 +20,7 @@
     create home page with credential validation (done)
     basic just log in screen and small info about website
 
-    add email verification
+    add email verification****
 
 /file views - video player
 
@@ -30,6 +30,8 @@
     obfuscate the link , look into guid/uuid (Done)
     create a page where you can get a link to view your files or video
     change primarykey to a uuid (Done) 
+
+    Consider adding a shareable variable to cross reference with public *********
     
 /admin
 

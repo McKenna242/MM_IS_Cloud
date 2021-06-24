@@ -1,0 +1,11 @@
+file type info
+
+https://fileinfo.com/filetypes/video
+
+template tags 
+
+https://docs.djangoproject.com/en/3.2/howto/custom-template-tags/
+
+
+bootstrap grid
+https://getbootstrap.com/docs/4.0/layout/grid/
