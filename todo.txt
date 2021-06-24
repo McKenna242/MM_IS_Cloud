@@ -20,14 +20,16 @@
     create home page with credential validation (done)
     basic just log in screen and small info about website
 
+    add email verification
+
 /file views - video player
 
     add folders to store files inside of
 
     plays unique videos from link in file descriptor (done)
-    obfuscate the link , look into guid/uuid
+    obfuscate the link , look into guid/uuid (Done)
     create a page where you can get a link to view your files or video
-    change primarykey to a uuid 
+    change primarykey to a uuid (Done) 
     
 /admin
 
@@ -59,7 +61,8 @@ Image/pdf link viewer (kind of done)
 Filter on the left side for sorting files (js based? )
 
 
+
 /BUGS
 
-change username failing with same email
-pdf not displaying
+change username failing with same email(fixed)
+pdf not displaying(fixed)

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .forms import SignUpForm, UserForm
+from .forms import SignUpForm, UserForm, EmailForm
 
 # Create your views here.
 
@@ -59,11 +59,23 @@ def auto_fill_form(request):
 
 def update_email(request):
     
-    form = UserForm(initial = dict(
-        email = request.user.email))
+    customer=User.objects.get(id=request.user.id)
+
+    if request.method == 'POST':
+        form = EmailForm(request.POST, instance = request.user)
+        if form.is_valid():
+            update = form.save(commit = False)
+            update.user = request.user
+            update.save()
+            return redirect('home')
     
-    context = dict(form=form)
-    return render(request, "registration/user_update-email.html", context) 
+    else:
+        form = EmailForm(data=request.POST, instance=customer)
+        
+    return render(request, 'registration/user_update-email.html', {
+    #return auto_fill_form(request)
+        'form': form
+    })
 
 
   

@@ -26,3 +26,8 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name']
 
+class EmailForm(forms.ModelForm):
+    email = forms.EmailField(validators = [validate_email], max_length=254, help_text = 'Enter a valid email address')
+    class Meta:
+        model = User
+        fields = ['email']
