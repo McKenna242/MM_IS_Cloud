@@ -68,3 +68,28 @@ Filter on the left side for sorting files (js based? )
 
 change username failing with same email(fixed)
 pdf not displaying(fixed)
+
+7/02/2021
+
+display txt / py files (convert file before display?)
+display docx files (word specific extension, grab info off file?)
+refine the filter   
+create a loading bar for uploads
+    (   define what points the loading bar incriments  (how full it is? when this call returns )
+        method calls in code that change the value that controls the loading bar
+    )
+look into email verification for email address updates
+third variable for sharable?
+
+like query for upload date
+select which field 
+
+xyz friend relationship 
+
+
+share to xyz or share to friends
+
+share to all
+share to different friend groups (google circles)
+share to public
+share to exact user
