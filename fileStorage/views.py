@@ -10,9 +10,14 @@ from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, Http404
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib.auth.models import User
+from urllib.parse import urlencode
+
+import urllib.parse
+import os
 
 # Create your views here.
 
+@login_required
 def index(request):
     #fileStorage = fileStorageSchema.objects.all()
     fileStorage = fileForm()
@@ -26,7 +31,7 @@ def index(request):
     #})
      
     
-
+@login_required
 def uploads(request):
     context = {}
     if request.method == 'POST':
@@ -50,22 +55,29 @@ def upload_file(request):
             _datetime = datetime.now()
             obj = form.save(commit=True)
             obj.fileName, obj.fileType = uploaded_file.name.rsplit(".", 1) #rsplit splits at the last instance of 1 dot
-            obj.fileURL = '/media/'+obj.fileName.replace(" ","%20")+"."+obj.fileType
+            #obj.fileURL = '/media/'+obj.fileName.replace(" ","%20")+"."+obj.fileType
+            obj.fileURL = '/media/'+urllib.parse.quote(obj.fileName+"."+obj.fileType)
             obj.filePath = 'F:/School/Summer2021/Independent Study'+context['url']
+            
+            #size needs to be a function
             setSize = round(uploaded_file.size/1048576, 2)
             setSize = str(setSize)
             setSize = setSize+'Mb'
+            
             obj.size = setSize
             obj.uploadedBy = request.user.id
-            obj.uploadDate = _datetime.strftime("%Y-%m-%d-%H-%M-%S")
+            obj.uploadDate = datetime.now()#_datetime.strftime("%Y-%m-%d-%H-%M-%S")
             obj.save()
             return redirect('/fileStorage/')
     
     else:
         form = fileForm()
-    return render(request, 'fileStorage/uploads.html', {
+
+    context = {
         'form': form
-    })
+    }
+
+    return render(request, 'fileStorage/uploads.html', context)
 
 #file list display
 @login_required
@@ -103,6 +115,16 @@ def image_view(request, pk):
     context = {'item':files}
 
     return render(request, 'fileStorage/imageview.html', context)
+
+def text_view(request, pk):
+    files = fileStorageSchema.objects.get(id=pk)
+    module_dir = os.path.dirname(__file__)  # get current directory
+    file_path = os.path.join(module_dir, "elifexample.py")
+    #with open(file_path,"r") as f:
+    #    content = f.read()
+    context = {'item':files}
+
+    return render(request, 'fileStorage/textview.html', context)#, content)
 
 @xframe_options_exempt
 def pdf_view(request, pk):

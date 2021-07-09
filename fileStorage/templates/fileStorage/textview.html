@@ -1,0 +1,15 @@
+
+
+{% load static %}
+
+
+
+{% block content %}
+
+<!-- style = "width:200px ; height:90%"-->
+<!-- vw and vh 100% of the view height/width -->
+<div class="row justify-content-center">
+    <iframe src={{ item.fileURL }} width=100% height=100%></iframe>
+</div>
+
+{% endblock %}

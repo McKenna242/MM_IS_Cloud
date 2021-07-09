@@ -5,3 +5,4 @@ from .models import fileStorageSchema
 # Register your models here.
 
 admin.site.register(fileStorageSchema)
+

@@ -1,0 +1,53 @@
+
+
+ 
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-5">
+      <div class="card">
+        <div class="card-body">
+ 
+        
+          <h2>Group Panel</h2>
+          {% if user.is_authenticated %}
+          <p>Current Group: {{ group.groupName }}</p> 
+          {% endif %}
+       
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+          <div class="card-body">
+            <a href="{% url 'invite' group_id=group.id %}">Invite New Members</a>
+            <!--a href="javascript:{document.getElementById('join').submit()}"><button class="btn btn-primary btn-lg btn-block"> Join {{group.groupName}}</button></a>-->
+            
+          </div>
+        </div>
+      </div>
+  
+    <div class="col-3">
+      <div class="card">
+        <div class="card-body">
+          <p>Group Members:  </p> 
+          {% for alluser in users %}
+            <p>{{alluser.first_name}} {{alluser.last_name}}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+ 
+
+  </div>
+
+  <form method ='POST' id= 'join' >
+    {% csrf_token %}
+    <input type="hidden" >
+  </form>
+
+{% endblock %}

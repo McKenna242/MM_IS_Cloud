@@ -7,6 +7,7 @@
     <div class="col-6">
       <div class="card">
         <div class="card-body">
+
           <h2>File Upload Form</h2>
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -14,10 +15,15 @@
             <p> </p>
             <input type="file" name="document">
             <button type="submit">Upload File</button>
-        </form>
+            <a>{{document.size}}</a>
+
+            <label for="upload-meter">Upload progress:</label>
+            <progress id="upload-meter" value=50 max=100 style="width:70%"></progress>
+            
+          </form>
         </div>
       </div>
     </div>
   </div>
- 
+
 {% endblock %}

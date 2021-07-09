@@ -93,3 +93,12 @@ share to all
 share to different friend groups (google circles)
 share to public
 share to exact user
+
+open offic eviewer
+
+which files belong to which groups
+
+navigate towards file per groups
+
+union view of everything
+

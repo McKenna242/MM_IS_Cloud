@@ -14,7 +14,9 @@ urlpatterns = [
     path('fileStorage/delete/<str:pk>/', views.delete_file, name = 'delete'),
     path('fileStorage/player/<str:pk>', views.video_play, name = 'video'),
     path('fileStorage/image/<str:pk>', views.image_view, name = 'image'),
-    path('fileStorage/pdf/<str:pk>', views.pdf_view, name = 'pdf')
+    path('fileStorage/pdf/<str:pk>', views.pdf_view, name = 'pdf'),
+    path('fileStorage/text/<str:pk>', views.text_view, name = 'text')
+
 
 
     

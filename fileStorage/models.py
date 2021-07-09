@@ -14,7 +14,7 @@ class fileStorageSchema(models.Model):
     fileURL = models.CharField(max_length=50, default='OOPS')
     #displayed as a string but read in as a byte and converted to mb/gb/etc
     size = models.CharField(max_length=50, default='0')
-    uploadDate = models.CharField(max_length=50, default='DATE')
+    uploadDate = models.DateTimeField(auto_now_add=True, null=True)
     public = models.BooleanField()
     uploadedBy = models.IntegerField(default=-1)
     #pathToFile = models.CharField(max_length = 100, default='PATH')

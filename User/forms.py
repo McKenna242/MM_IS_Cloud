@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-
+from .models import Group
 
 
 def validate_email(value):
@@ -31,3 +31,11 @@ class EmailForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email']
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['groupName']
+        
+class InviteForm(forms.Form):
+    users = forms.ModelChoiceField(queryset=User.objects.all())

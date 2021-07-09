@@ -7,15 +7,34 @@
 
 {% block content %}
   <div class="row justify-content-center">
-    <div class="col-6">
+    <div class="col-5">
       <div class="card">
         <div class="card-body">
+ 
+        
           <h2>User Panel</h2>
-          <p>Other Site Users:  {{ count }}</p> 
           {% if user.is_authenticated %}
           <p>Current Email: {{ user.email }}</p> 
           <p>Current Name: {{ user.first_name }} {{ user.last_name }}</p>
           {% endif %}
+       
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card">
+        <div class="card-body">
+          <p>Site Users:  {{ count }}</p> 
+          {% for alluser in users %}
+            <p>{{alluser.first_name}} {{alluser.last_name}}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="card">
+        <div class="card-body">
           <a href="{% url 'update' %}">Update User</a>
           <br>
           <a href="{% url 'password_change' %}">Change Password</a> 
@@ -25,5 +44,37 @@
         </div>
       </div>
     </div>
+
+
   </div>
+
+  <div class="row justify-content-left">
+    <div class="col-5">
+      <div class="card">
+        <div class="card-body">
+  
+        
+          <h2>Groups</h2>
+          <a href="{% url 'createGroup' %}">Create Group</a>
+          <br>
+          <p>Current Groups:</p>
+          {% for allgroups in group %}
+            {% for allmembers in member %}
+                {% if allmembers.member.id ==  currentUser.id and allmembers.groups.id == allgroups.id and allmembers.accepted == True %} 
+                <a href="{% url 'groupDash' allgroups.id %}">{{allgroups.groupName}} </a> <p>Leader : {{ allgroups.groupCreator }}</p>
+                {% endif %}
+                <!--<a href="{% url 'groupDash' allgroups.id %}">{{allgroups.groupName}} </a> <p>Leader : {{ allgroups.groupCreator }}</p>
+                {{allmembers.member.id }} {{currentUser.id }} {{allmembers.groups.id }} {{allgroups.id}}-->
+            {% endfor %}
+          {% endfor %}
+          <p>Invites:</p>
+          {% for invites in member %}
+                  {% if invites.member.id == currentUser.id and invites.invited == True %}
+                    <a href="{% url 'acceptinvite' group_id=invites.groups.id %}">{{invites.groups.groupName}} invite  </a>
+                    <br>
+                  {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
 {% endblock %}
