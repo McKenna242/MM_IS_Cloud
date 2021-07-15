@@ -1,3 +1,5 @@
-Someone asked to change the email for email {{ email }}. Follow the link below:
+User {{ user }} asked to change the email from {{ user.email }} to {{ newEmail.newEmail }}
 
-{{ protocol}}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
+To confirm this request click this <a href="{% url 'changeEmail' newEmail.id %}">link</a>
+
+If link doesn't work : mitch-test:7000{% url 'changeEmail' newEmail.id %}

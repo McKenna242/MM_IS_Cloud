@@ -4,13 +4,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm, UserForm, EmailForm, GroupForm, InviteForm
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from .models import Member, Group
+from .models import Member, Group, ChangeEmail
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django_email_verification import send_email
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.utils.html import strip_tags
+
 # Create your views here.
 
 @login_required
@@ -71,23 +75,49 @@ def auto_fill_form(request):
 
 def update_email(request):
     
-    customer=User.objects.get(id=request.user.id)
-
+    user=User.objects.get(id=request.user.id)
     if request.method == 'POST':
         form = EmailForm(request.POST, instance = request.user)
         if form.is_valid():
-            update = form.save(commit = False)
-            update.user = request.user
-            update.save()
+            email = form.cleaned_data['email']
+            newEmail = ChangeEmail.objects.create(User = user, newEmail = email)
+            context = {'user': user, 'newEmail': newEmail}
+            html = render_to_string('registration/email_change_email.html', context)
+            plain_message = strip_tags(html)
+            send_mail(
+                'Email Change Request',
+                plain_message,
+                'webmaster@olacloudstorage.com',
+                [email],
+                fail_silently=False,
+                )
+            
             return redirect('home')
     
     else:
-        form = EmailForm(data=request.POST, instance=customer)
+        form = EmailForm(data=request.POST, instance=user)
         
     return render(request, 'registration/user_update-email.html', {
     #return auto_fill_form(request)
         'form': form
     })
+def chage_email_page(request, pk):
+    
+    email=ChangeEmail.objects.get(id=pk)
+    user = request.user
+
+    context = {'user':user, 'email':email}
+    #user=User.objects.get(id=request.user.id)
+    if request.method == 'POST':
+        user.email = email.newEmail
+        user.save()
+        ChangeEmail.objects.filter(User_id = user.id).delete()
+        return redirect('home')
+        
+        
+    return render(request, 'registration/change_email_page.html', context )
+    
+    
 def invite(request, group_id):
 
     #group = Group.objects.get(id=request.group.id)
@@ -140,8 +170,8 @@ def group_dashboard(request, pk):
     group = Group.objects.get(id=pk)
     users = User.objects.all()
     user = request.user
-    
-    context = {'group':group,'users':users}
+    members = Member.objects.filter(groups=group)
+    context = {'group':group,'users':users, 'members':members}
     
     if request.method == 'POST':
         newMember = Member.objects.create(member = user, groups = group)
@@ -154,6 +184,7 @@ def group_dashboard(request, pk):
 def accept_invite(request, group_id):
     
     #file = fileStorageSchema.objects.get(id=pk)
+    group = Group.objects.get(id=group_id)
     user = request.user
     member = Member.objects.get(member=user.id, groups = group_id)
     if request.method == "POST":
@@ -161,8 +192,8 @@ def accept_invite(request, group_id):
         member.save()
         return redirect('/dashboard/')
     
-    
-    return render(request, 'accept_invite.html')
+    context = {'group':group }
+    return render(request, 'accept_invite.html', context)
     
     
 def secret_page(request):

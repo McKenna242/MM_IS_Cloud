@@ -16,5 +16,6 @@ urlpatterns = [
     path('groupDashboard/<str:pk>', views.group_dashboard, name='groupDash'),
     path('invite/<group_id>', views.invite, name='invite'),
     path('accept-invite/<group_id>', views.accept_invite, name='acceptinvite'),
+    path('change-email/<str:pk>', views.chage_email_page, name='changeEmail'),
 
 ]

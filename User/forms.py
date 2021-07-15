@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Group
+from .models import Group, ChangeEmail
 
 
 def validate_email(value):
@@ -29,7 +29,7 @@ class UserForm(forms.ModelForm):
 class EmailForm(forms.ModelForm):
     email = forms.EmailField(validators = [validate_email], max_length=254, help_text = 'Enter a valid email address')
     class Meta:
-        model = User
+        model = ChangeEmail
         fields = ['email']
 
 class GroupForm(forms.ModelForm):

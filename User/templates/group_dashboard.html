@@ -34,8 +34,8 @@
       <div class="card">
         <div class="card-body">
           <p>Group Members:  </p> 
-          {% for alluser in users %}
-            <p>{{alluser.first_name}} {{alluser.last_name}}</p>
+          {% for alluser in members %}
+            <p>{{alluser.member.first_name}} {{alluser.member.last_name}}</p>
           {% endfor %}
         </div>
       </div>
