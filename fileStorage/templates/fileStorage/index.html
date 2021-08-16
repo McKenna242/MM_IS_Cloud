@@ -9,16 +9,15 @@
 <div>
     <!-- style= "max-width: 1920px; margin:auto" this is for UW support in row-->
     <div class="row" >
-
+        
         <div class = "col-lg-2 col-sm-12">
             <div class = "col">
      
-                <form method="get">
+                <form style ="border:1px solid black; padding: 6px" method="get">
                     {{ myFilter.form|crispy }}
+                <br>
                 <button class="btn btn-primary" type = "submit">Filter</button>
-                <input type="button" value="Reset" onClick="this.form.reset()" />
-                <a href="{% url 'file' %}">Reset</a>
-
+                <a href="{% url 'file' %}" class="btn btn-danger" style="float: right;" role="button">Reset</a>
                 </form> 
             </div>
         </div>
@@ -36,12 +35,13 @@
                         <th scope ="col">Uploaded</th>
                         <th scope ="col">Share</th>
                         <th scope ="col">Public</th>
+                        <th scope ="col">To Group</th>
                         <th scope ="col">Note</th>
                         <th scope ="col">Delete</th>
 
                     </tr>
                     {% for fileItem in files %}
-                        {% if fileItem.uploadedBy == user.id or fileItem.public == True %}
+ 
                         <tr>
                             <td> 
                                 <!-- Name -->
@@ -83,6 +83,64 @@
                                 {% else %}
                                     <td>No</td>
                                 {% endif %}
+                            <!-- Group -->
+                            <td>{{fileItem.groups}}</td>
+                            <!-- File Note -->
+                            <td> {{fileItem.fileNote }} </td>
+                            <!-- Delete -->
+                            <td>
+                                <form method = "link" action = "{% url 'delete' fileItem.id %}">
+                                    <button type="submit" class="btn btn-danger">X</button>
+                                </form>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    {% for fileItem in privateFiles %}
+                        {% if fileItem.uploadedBy == user.id %} <!--or fileItem.public == True %}-->
+                        <tr>
+                            <td> 
+                                <!-- Name -->
+                                <div class="storage-image">
+                                    <a href={{ fileItem.fileURL }}  class = "file-btn" target="_blank" download>{{ fileItem.fileName }}</a>
+                                </div>  
+                            </td>
+                            <!-- Type -->
+                            <td> {{ fileItem.fileType }} </td>
+                            <!-- Size -->
+                            <td> {{ fileItem.size }} </td>
+                            <!-- Upload Date -->
+                            <td> {{ fileItem.uploadDate }} </td>
+                            <!-- Share -->
+                            <td>
+
+                                {% if fileItem.public == True %} 
+
+                                    {% if fileItem.fileType in vidList or fileItem.fileType in audList %}
+                                        <a href= "{% url 'video' fileItem.id %}">Link</a>
+                                    {% elif fileItem.fileType == 'pdf' %}
+                                        <a href= "{% url 'pdf' fileItem.id %}">Link</a>
+                                    {% elif fileItem.fileType == 'py' or fileItem.fileType == 'docx'%}
+                                        <a href= "{% url 'text' fileItem.id %}">Link</a>
+
+                                    {% else %}
+                                        <a href= "{% url 'image' fileItem.id %}">Link</a>
+                                    {% endif %}
+                                
+                                {% else %}
+
+                                    <p>Private</p>
+
+                                {% endif %}
+                            <!-- Public -->
+                            </td>
+                                {% if fileItem.public == True %} 
+                                    <td>Yes</td>
+                                {% else %}
+                                    <td>No</td>
+                                {% endif %}
+                            <!-- Group -->
+                            <td>{{fileItem.groups}}</td>
                             <!-- File Note -->
                             <td> {{fileItem.fileNote }} </td>
                             <!-- Delete -->
@@ -93,8 +151,8 @@
                             </td>
 
                         {% endif %}
-                        </tr>
-                    {% endfor %}
+                    </tr>
+                {% endfor %}
                 </table>
             </div> 
         </div>

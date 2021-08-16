@@ -5,20 +5,30 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-6">
-      <div class="card">
+      <div class="card text-center">
         <div class="card-body">
 
-          <h2>File Upload Form</h2>
+          <h2 class="card-title">File Uploads</h2>
+        
           <form method="post" enctype="multipart/form-data">
+            
             {% csrf_token %}
             {{ form|crispy }}
             <p> </p>
+            <select name="groupName">
+              <option selected="selected" disabled></option>
+              <option group="PRIVATE">PRIVATE</option>
+              {% for group in group %}
+              <option group="{{group.groupName}}">{{group.groupName}}</option>
+              {% endfor %}
+            </select>
+            <p></p>
             <input type="file" name="document">
             <button type="submit">Upload File</button>
             <a>{{document.size}}</a>
 
-            <label for="upload-meter">Upload progress:</label>
-            <progress id="upload-meter" value=50 max=100 style="width:70%"></progress>
+            <!--<label for="upload-meter">Upload progress:</label>
+            <progress id="upload-meter" value=50 max=100 style="width:70%"></progress>-->
             
           </form>
         </div>

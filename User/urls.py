@@ -17,5 +17,9 @@ urlpatterns = [
     path('invite/<group_id>', views.invite, name='invite'),
     path('accept-invite/<group_id>', views.accept_invite, name='acceptinvite'),
     path('change-email/<str:pk>', views.chage_email_page, name='changeEmail'),
+    path('groupDashboard/member-ban/<str:pk>', views.delete_member, name='deleteMember'),
+    path('groupDashboard/promote-member/<str:pk>', views.promote_member, name='promoteMember'),
+    path('groupDashboard/demote-member/<str:pk>', views.demote_member, name='demoteMember'),
+
 
 ]

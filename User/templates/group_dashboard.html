@@ -6,38 +6,107 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+  <div class="card">
+    <div class="card-header">
+      {{ group.groupName }} Panel
+      {{currMember.leader}}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Username: {{ user.username }}</h5>
+      <h6>Your rank is 
+        {% if currMember.leader %}
+        Leader
+        {% elif currMember.captain %}
+        Captain
+        {% else %}
+        Member
+        {% endif %}</h6>
+      <p class="card-text">Use this dashboard to manage Group permissions</p>
+    </div>
+  </div>
+  <br>
+
   <div class="row justify-content-center">
     <div class="col-5">
       <div class="card">
         <div class="card-body">
  
-        
-          <h2>Group Panel</h2>
-          {% if user.is_authenticated %}
-          <p>Current Group: {{ group.groupName }}</p> 
+          {% if currMember.leader == True or currMember.captain == True %}
+          <a href="{% url 'invite' group_id=group.id %}">Invite New Members</a>
           {% endif %}
-       
         </div>
       </div>
     </div>
-    <div class="col-4">
-        <div class="card">
-          <div class="card-body">
-            <a href="{% url 'invite' group_id=group.id %}">Invite New Members</a>
-            <!--a href="javascript:{document.getElementById('join').submit()}"><button class="btn btn-primary btn-lg btn-block"> Join {{group.groupName}}</button></a>-->
-            
-          </div>
-        </div>
-      </div>
-  
-    <div class="col-3">
+    
+    <div class="col-7">
       <div class="card">
         <div class="card-body">
-          <p>Group Members:  </p> 
-          {% for alluser in members %}
-            <p>{{alluser.member.first_name}} {{alluser.member.last_name}}</p>
-          {% endfor %}
-        </div>
+            <table class = "table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope ="col">Group Members</th>
+                  <th scope ="col">Rank</th>
+                  <th scope ="col">Invited</th>
+                  {% if currMember.leader == True %}
+                    <th scope ="col">Promote</th>
+                    <th scope ="col">Demote</th>
+                    <th scope ="col">Delete</th>
+                  {% endif %}
+                </tr>
+
+                {% for alluser in members %}
+                  <tr>
+                    <td>
+                      <p>{{alluser.member.username}}</p>
+                    </td>
+                    {% if alluser.accepted == True %}
+                      <td>
+                        {% if alluser.leader == True %} 
+                        <p>Leader</p>
+                        {% elif alluser.captain == True %}
+                        <p>Captain</p>
+                        {% else %}
+                        <p>Member</p>
+                        {% endif %}
+                      </td>
+                      <td>
+                        Accepted
+                      </td>
+                      {% else %}
+                        <td></td>
+                        <td>Invited</td>
+                      {% endif %}
+                      {% if currMember.leader == True %}
+                        {% if alluser.leader == True %}
+                          <td></td>
+                          <td></td>
+                        {% elif alluser.captain == False %}
+                        <td>
+                          <form method = "link" action = "{% url 'promoteMember' pk=alluser.id %}">
+                            <button type="submit" class="btn btn-success">X</button>
+                          </form>
+                        </td>
+                        <td></td>
+                        {% elif alluser.captain == True %}
+                        <td></td>
+                        <td>
+                          <form method = "link" action = "{% url 'demoteMember' pk=alluser.id %}">
+                            <button type="submit" class="btn btn-warning">X</button>
+                          </form>
+                        </td>
+                        
+                        {% endif %}
+                        <td>
+                          <form method = "link" action = "{% url 'deleteMember' pk=alluser.id %}">
+                            <button type="submit" class="btn btn-danger">X</button>
+                          </form>
+                        </td>
+                     {% endif %}
+                  </tr>
+                {% endfor %}
+              </thead>
+            </table>
+          </div>
       </div>
     </div>
 

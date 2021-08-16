@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<!-- bootstrap script to style and center cancel button to the right -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+<div class="row justify-content-center">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-body">
+            <p>Are you sure you want to promote {{ user }} to captain? </p>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="submit" name ="Confirm">
+                <!-- change url to groupdask but needs PK for group -->
+                <a class="btn btn-sm btn-default pull-right" href="{% url 'file' %}">Cancel</a>
+
+               
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

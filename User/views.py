@@ -23,8 +23,13 @@ def home(request):
     user = User.objects.all()
     groups = Group.objects.all()
     member = Member.objects.all()
+    
+    currUser = request.user
+    memberOf = Member.objects.filter(member_id = (currUser.id))
+    
+    
     currentUser = request.user
-    context = {'count':count, 'users':user, 'group':groups, 'member':member, 'currentUser':currentUser }
+    context = {'count':count, 'users':user, 'group':groups, 'member':member, 'currentUser':currentUser, 'memberOf':memberOf }
     return render(request, 'home.html', context)
 
 def signup(request):
@@ -34,6 +39,8 @@ def signup(request):
             user = form.save()
             user.is_active = False
             send_email(user)
+
+
 
             return redirect('file')
     else:
@@ -128,11 +135,14 @@ def invite(request, group_id):
         form = InviteForm(request.POST)
         if form.is_valid():
             user = form.cleaned_data['users']
-            print(user.id)
+
+            #if(Member.objects.filter(member=user.id)):
+            #    print('invited already')
+            #else:
             newMember = Member.objects.create(member = user, groups = group, invited = True, accepted = False)
-            newMember.save()   
+            newMember.save()
             #update.user = request.user
-            #return redirect('home')
+            return redirect('home')
     else:
         form = InviteForm(data=request.POST)
       
@@ -153,7 +163,7 @@ def create_group(request):
             group.groupCreator = request.user
             groupName = form.cleaned_data.get("groupName")
             group.save()
-            newMember = Member.objects.create(member = user, groups = group, accepted = True, invited = True)
+            newMember = Member.objects.create(member = user, groups = group, accepted = True, invited = True, leader = True)
             newMember.save()   
             return redirect('home')
     
@@ -170,8 +180,10 @@ def group_dashboard(request, pk):
     group = Group.objects.get(id=pk)
     users = User.objects.all()
     user = request.user
+    member = Member.objects.filter(groups_id=pk).filter(member_id=user.id).first()
     members = Member.objects.filter(groups=group)
-    context = {'group':group,'users':users, 'members':members}
+    
+    context = {'group':group,'users':users, 'members':members, 'currMember': member}
     
     if request.method == 'POST':
         newMember = Member.objects.create(member = user, groups = group)
@@ -195,6 +207,44 @@ def accept_invite(request, group_id):
     context = {'group':group }
     return render(request, 'accept_invite.html', context)
     
+def delete_member(request, pk):
+    member = Member.objects.get(id=pk)
+    user = User.objects.get(id=member.member_id)
+    if request.method == "POST":
+        
+        Member.objects.filter(id = pk).delete()
+        #return redirect('groupDash', pk=member.groups.id)
+        return redirect('home')
+
+    context = {'member':member, 'user':user}
+    return render(request, 'member_ban.html', context)
+
+def promote_member(request, pk):
+    member = Member.objects.get(id=pk)
+    user = User.objects.get(id=member.member_id)
+
+    if request.method == "POST":
+        member.captain = True
+        member.save()
+        return redirect('home')
+    
+    context = {'member':member, 'user':user}
+    return render(request, 'member/promote_member.html', context)
+
+
+def demote_member(request, pk):
+    
+    member = Member.objects.get(id=pk)
+    user = User.objects.get(id=member.member_id)
+
+    if request.method == "POST":
+        member.captain = False
+        member.save()
+        return redirect('home')
+    
+    context = {'member':member, 'user':user}
+    return render(request, 'member/demote_member.html', context)
+     
     
 def secret_page(request):
     return render(request, 'secret_page.html')

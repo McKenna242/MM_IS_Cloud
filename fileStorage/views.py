@@ -11,7 +11,7 @@ from django.http import FileResponse, Http404
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib.auth.models import User
 from urllib.parse import urlencode
-
+from User.models import Group, Member
 import urllib.parse
 import os
 
@@ -51,6 +51,10 @@ def upload_file(request):
         fs.save(uploaded_file.name, uploaded_file)
         context['url'] = fs.url(uploaded_file.name)
         form = fileForm(request.POST, request.FILES) 
+        
+        print(request.POST['groupName'])
+  
+
         if form.is_valid():
             _datetime = datetime.now()
             obj = form.save(commit=True)
@@ -64,6 +68,8 @@ def upload_file(request):
             setSize = str(setSize)
             setSize = setSize+'Mb'
             
+            obj.groups = request.POST['groupName']
+
             obj.size = setSize
             obj.uploadedBy = request.user.id
             obj.uploadDate = datetime.now()#_datetime.strftime("%Y-%m-%d-%H-%M-%S")
@@ -73,9 +79,15 @@ def upload_file(request):
     else:
         form = fileForm()
 
+    user = request.user
+    #.first() fixed the issue of .filter returning a queryset
+    member = Member.objects.filter(member_id = (user.id)).first()
+    group = Group.objects.filter(id = member.groups_id)
+    
+
     context = {
-        'form': form
-    }
+        'form': form, 'group':group, 'member':member
+        }
 
     return render(request, 'fileStorage/uploads.html', context)
 
@@ -84,14 +96,31 @@ def upload_file(request):
 def file_list(request):
     
     #grabbing all files in database 
-    files = fileStorageSchema.objects.all()
     #filter files according to filter bar
-    myFilter = fileFilter(request.GET, queryset=files)
     #returns a new list of files
-    files = myFilter.qs
     audioList = audioExtensionList
     videoList = videoExtensionList
-    context = {'files': files, 'myFilter':myFilter, 'vidList': videoList, 'audList': audioList}
+    user = request.user
+    members = Member.objects.all()
+    if( not (Member.objects.filter(member_id = (user.id)))):
+        group = Group.objects.get(id = 11)
+        newMember = Member.objects.create(member = user, groups = group, invited = True, accepted = True)
+        #newGroup = Group.objects.create(groupName = 'PRIVATE', groupCreator_id =user.id)
+        #newPrivMember = Member.objects.create(member = user, groups = group, invited = True, accepted = True, captain = True, leader = True)
+        
+    member = Member.objects.filter(member_id = (user.id)).first()
+    
+    group = Group.objects.filter(id = member.groups_id).first()
+    
+    files = fileStorageSchema.objects.filter(groups = group.groupName)
+    myFilter = fileFilter(request.GET, queryset=files)
+
+    privateFiles = fileStorageSchema.objects.filter(groups = 'PRIVATE')
+    
+    files = myFilter.qs
+
+    context = {'files': files, 'myFilter':myFilter, 'vidList': videoList, 'audList': audioList,
+               'member': member, 'group':group, 'user':user, 'privateFiles':privateFiles }
     
     return render(request, 'fileStorage/index.html', context)
     
